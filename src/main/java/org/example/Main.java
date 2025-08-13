@@ -26,16 +26,16 @@ public class Main {
 
     // ===== Demo Execution =====
     private static void runDemo() {
-        System.out.println("\n=== Starting Book Management System Demo ===\n");
-        
+        System.out.println("\n=== Starting Book Management System Demo Hello ===\n");
+
         // Create sample data
         Author[] authors = createSampleAuthors();
         Category[] categories = createSampleCategories();
         createSampleBooks(authors, categories);
-        
+
         // Demonstrate operations using the last author (Haruki Murakami)
         demonstrateBookOperations(authors[2]);
-        
+
         // Demonstrate ManyToMany relationship operations
         demonstrateCategoryOperations(categories[0]); // Fiction category
     }
@@ -236,12 +236,12 @@ public class Main {
 
     private static void demonstrateCategoryOperations(Category category) {
         System.out.println("\n=== Demonstrating Category Operations ===");
-        
+
         // 1. Show all books in a category
         System.out.println("\nBooks in category '" + category.getName() + "':");
         List<Book> booksInCategory = findBooksByCategory(category.getId());
         booksInCategory.forEach(book -> System.out.println("- " + book.getTitle() + " by " + book.getAuthorName()));
-        
+
         // 2. Add a new category to a book
         System.out.println("\nAdding 'Science Fiction' category to '1984'...");
         executeInTransaction(() -> {
@@ -249,13 +249,13 @@ public class Main {
                 "SELECT b FROM Book b WHERE b.title = :title", Book.class)
                 .setParameter("title", "1984")
                 .getSingleResult();
-            
+
             Category scifiCategory = new Category("Science Fiction");
             entityManager.persist(scifiCategory);
             book1984.addCategory(scifiCategory);
             System.out.println("Added category 'Science Fiction' to '1984'");
         });
-        
+
         // 3. Show updated categories for a book
         System.out.println("\nUpdated categories for '1984':");
         Book updatedBook = entityManager.createQuery(
@@ -263,18 +263,18 @@ public class Main {
             .setParameter("title", "1984")
             .getSingleResult();
         updatedBook.getCategories().forEach(c -> System.out.println("- " + c.getName()));
-        
+
         // 4. Find all categories
         System.out.println("\nAll categories and their book counts:");
         List<Category> allCategories = entityManager.createQuery(
             "SELECT c FROM Category c LEFT JOIN FETCH c.books", Category.class)
             .getResultList();
-            
-        allCategories.forEach(c -> 
+
+        allCategories.forEach(c ->
             System.out.println("- " + c.getName() + ": " + c.getBooks().size() + " books")
         );
     }
-    
+
     @SuppressWarnings("unchecked")
     private static List<Book> findBooksByCategory(Long categoryId) {
         return entityManager.createQuery(
