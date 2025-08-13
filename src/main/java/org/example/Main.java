@@ -26,7 +26,7 @@ public class Main {
 
     // ===== Demo Execution =====
     private static void runDemo() {
-        System.out.println("\n=== Starting Book Management System Demo Not Hello ===\n");
+        System.out.println("\n=== Starting Book Management System Demo Hello ===\n");
 
         // Create sample data
         Author[] authors = createSampleAuthors();
